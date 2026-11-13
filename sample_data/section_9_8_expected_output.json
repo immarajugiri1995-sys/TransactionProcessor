@@ -1,0 +1,118 @@
+{
+  "totalRequestsReceived": 6,
+  "uniqueTransactionsApplied": 4,
+  "totalRetryAttempts": 1,
+  "countsByStatus": {
+    "RECEIVED": 0,
+    "PENDING": 0,
+    "PROCESSING": 0,
+    "RETRY_PENDING": 0,
+    "PROCESSED": 4,
+    "DUPLICATE": 1,
+    "FAILED": 1
+  },
+  "missingSequences": [],
+  "finalAccountBalances": {
+    "ACC-201": 85.0,
+    "ACC-203": 500.0
+  },
+  "requestOutcomes": [
+    {
+      "inputOrder": 1,
+      "transactionId": "TXN-2002",
+      "requestId": "REQ-2",
+      "sequence": 2,
+      "accountRef": "***201",
+      "initialArrivalStatus": "PENDING",
+      "finalStatus": "PROCESSED",
+      "attempts": 1,
+      "lifecycleTransitions": [
+        "RECEIVED",
+        "PENDING",
+        "PROCESSING",
+        "PROCESSED"
+      ],
+      "diagnostic": "Applied DEBIT 40 USD (drained from pending buffer after REQ-1 sequence 1 completed)"
+    },
+    {
+      "inputOrder": 2,
+      "transactionId": "TXN-2001",
+      "requestId": "REQ-1",
+      "sequence": 1,
+      "accountRef": "***201",
+      "initialArrivalStatus": "PROCESSED",
+      "finalStatus": "PROCESSED",
+      "attempts": 1,
+      "lifecycleTransitions": [
+        "RECEIVED",
+        "PROCESSING",
+        "PROCESSED"
+      ],
+      "diagnostic": "Applied CREDIT 100 USD"
+    },
+    {
+      "inputOrder": 3,
+      "transactionId": "TXN-2002",
+      "requestId": "REQ-2-DUP",
+      "sequence": 2,
+      "accountRef": "***201",
+      "initialArrivalStatus": "DUPLICATE",
+      "finalStatus": "DUPLICATE",
+      "attempts": 0,
+      "lifecycleTransitions": [
+        "RECEIVED",
+        "DUPLICATE"
+      ],
+      "diagnostic": "Duplicate detected for transactionId=TXN-2002 (requestId=REQ-2-DUP)"
+    },
+    {
+      "inputOrder": 4,
+      "transactionId": "TXN-2003",
+      "requestId": "REQ-3",
+      "sequence": 3,
+      "accountRef": "***201",
+      "initialArrivalStatus": "PROCESSED",
+      "finalStatus": "PROCESSED",
+      "attempts": 1,
+      "lifecycleTransitions": [
+        "RECEIVED",
+        "PROCESSING",
+        "PROCESSED"
+      ],
+      "diagnostic": "Applied CREDIT 25 USD"
+    },
+    {
+      "inputOrder": 5,
+      "transactionId": "TXN-2004",
+      "requestId": "REQ-4",
+      "sequence": 4,
+      "accountRef": "***202",
+      "initialArrivalStatus": "FAILED",
+      "finalStatus": "FAILED",
+      "attempts": 0,
+      "lifecycleTransitions": [
+        "RECEIVED",
+        "FAILED"
+      ],
+      "diagnostic": "Validation failed: amount must be strictly positive (> 0), got -10"
+    },
+    {
+      "inputOrder": 6,
+      "transactionId": "TXN-2005",
+      "requestId": "REQ-5",
+      "sequence": 5,
+      "accountRef": "***203",
+      "initialArrivalStatus": "RETRY_PENDING",
+      "finalStatus": "PROCESSED",
+      "attempts": 2,
+      "lifecycleTransitions": [
+        "RECEIVED",
+        "PROCESSING",
+        "RETRY_PENDING",
+        "PROCESSING",
+        "PROCESSED"
+      ],
+      "diagnostic": "Applied CREDIT 500 USD (recovered on attempt 2 after transient timeout on attempt 1)"
+    }
+  ]
+}

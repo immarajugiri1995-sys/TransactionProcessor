@@ -1,0 +1,42 @@
+--- STREAMING STRUCTURED AUDIT LOGS ---
+{"timestamp":"2026-11-13T13:30:00.001Z","event":"BUFFERED_OUT_OF_ORDER","transactionId":"TXN-2002","requestId":"REQ-2","accountRef":"***201","sequence":2,"status":"PENDING","attempt":0,"detail":"Buffered out-of-order request: sequence=2 awaiting expectedSequence=1"}
+{"timestamp":"2026-11-13T13:30:00.002Z","event":"PROCESSING_STARTED","transactionId":"TXN-2001","requestId":"REQ-1","accountRef":"***201","sequence":1,"status":"PROCESSING","attempt":1,"detail":"Processing attempt 1 of 4"}
+{"timestamp":"2026-11-13T13:30:00.003Z","event":"TRANSACTION_PROCESSED","transactionId":"TXN-2001","requestId":"REQ-1","accountRef":"***201","sequence":1,"status":"PROCESSED","attempt":1,"detail":"Applied CREDIT 100 USD"}
+{"timestamp":"2026-11-13T13:30:00.004Z","event":"PROCESSING_STARTED","transactionId":"TXN-2002","requestId":"REQ-2","accountRef":"***201","sequence":2,"status":"PROCESSING","attempt":1,"detail":"Processing attempt 1 of 4"}
+{"timestamp":"2026-11-13T13:30:00.005Z","event":"TRANSACTION_PROCESSED","transactionId":"TXN-2002","requestId":"REQ-2","accountRef":"***201","sequence":2,"status":"PROCESSED","attempt":1,"detail":"Applied DEBIT 40 USD"}
+{"timestamp":"2026-11-13T13:30:00.006Z","event":"DUPLICATE_IGNORED","transactionId":"TXN-2002","requestId":"REQ-2-DUP","accountRef":"***201","sequence":2,"status":"DUPLICATE","attempt":0,"detail":"Duplicate detected for transactionId=TXN-2002 (requestId=REQ-2-DUP)"}
+{"timestamp":"2026-11-13T13:30:00.007Z","event":"PROCESSING_STARTED","transactionId":"TXN-2003","requestId":"REQ-3","accountRef":"***201","sequence":3,"status":"PROCESSING","attempt":1,"detail":"Processing attempt 1 of 4"}
+{"timestamp":"2026-11-13T13:30:00.008Z","event":"TRANSACTION_PROCESSED","transactionId":"TXN-2003","requestId":"REQ-3","accountRef":"***201","sequence":3,"status":"PROCESSED","attempt":1,"detail":"Applied CREDIT 25 USD"}
+{"timestamp":"2026-11-13T13:30:00.009Z","event":"VALIDATION_FAILED","transactionId":"TXN-2004","requestId":"REQ-4","accountRef":"***202","sequence":4,"status":"FAILED","attempt":0,"detail":"Validation failed: amount must be strictly positive (> 0), got -10"}
+{"timestamp":"2026-11-13T13:30:00.010Z","event":"PROCESSING_STARTED","transactionId":"TXN-2005","requestId":"REQ-5","accountRef":"***203","sequence":5,"status":"PROCESSING","attempt":1,"detail":"Processing attempt 1 of 4"}
+{"timestamp":"2026-11-13T13:30:00.011Z","event":"TRANSIENT_FAILURE_RETRY_SCHEDULED","transactionId":"TXN-2005","requestId":"REQ-5","accountRef":"***203","sequence":5,"status":"RETRY_PENDING","attempt":1,"detail":"Simulated transient ledger timeout on attempt 1 for transactionId=TXN-2005 -> scheduling retry"}
+{"timestamp":"2026-11-13T13:30:00.012Z","event":"PROCESSING_STARTED","transactionId":"TXN-2005","requestId":"REQ-5","accountRef":"***203","sequence":5,"status":"PROCESSING","attempt":2,"detail":"Processing attempt 2 of 4"}
+{"timestamp":"2026-11-13T13:30:00.013Z","event":"TRANSACTION_PROCESSED","transactionId":"TXN-2005","requestId":"REQ-5","accountRef":"***203","sequence":5,"status":"PROCESSED","attempt":2,"detail":"Applied CREDIT 500 USD"}
+
+================================================================================
+           IDEMPOTENT TRANSACTION PROCESSING SERVICE - L2 SUMMARY REPORT        
+================================================================================
+Total Requests Ingested       : 6
+Unique Transactions Applied   : 4
+Total Transient Retry Attempts: 1
+--------------------------------------------------------------------------------
+COUNTS BY FINAL STATUS:
+  PENDING         : 0
+  PROCESSED       : 4
+  DUPLICATE       : 1
+  FAILED          : 1
+--------------------------------------------------------------------------------
+PER-REQUEST LIFECYCLE OUTCOMES:
+  TXN_ID     | REQ_ID     | SEQ   | ACCOUNT  | STATUS      | ATTEMPTS | DIAGNOSTIC
+  -----------+------------+-------+----------+-------------+----------+---------
+  TXN-2002   | REQ-2      | 2     | ***201   | PROCESSED   | 1        | Applied DEBIT 40 USD
+  TXN-2001   | REQ-1      | 1     | ***201   | PROCESSED   | 1        | Applied CREDIT 100 USD
+  TXN-2002   | REQ-2-DUP  | 2     | ***201   | DUPLICATE   | 0        | Duplicate detected for transactionId=TXN-2002 (requestId=REQ-2-DUP)
+  TXN-2003   | REQ-3      | 3     | ***201   | PROCESSED   | 1        | Applied CREDIT 25 USD
+  TXN-2004   | REQ-4      | 4     | ***202   | FAILED      | 0        | Validation failed: amount must be strictly positive (> 0), got -10
+  TXN-2005   | REQ-5      | 5     | ***203   | PROCESSED   | 2        | Applied CREDIT 500 USD
+--------------------------------------------------------------------------------
+SETTLED ACCOUNT BALANCES:
+  ACC-201         : 85.00
+  ACC-203         : 500.00
+================================================================================
